@@ -1,0 +1,244 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Beamer Präsentation
+% LaTeX Vorlage
+% Version 1.0 (10/11/12)
+% 
+% Diese Vorlage wurde heruntergeladen von:
+% http://www.LaTeXTemplates.com
+%
+% Übersetzt und an eigene Bedürfnisse angepasst von Edgar 'Fast Edi' Hoffmann (08.03.2013)
+% Lizenz:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass{beamer}
+
+\mode<presentation> {
+
+\usetheme{default}
+\usecolortheme{dolphin}
+
+
+% \setbeamertemplate{footline}				% Zum Entfernen der Fusszeile auf allen Folien kann diese Zeile unkommentiert werden
+\setbeamertemplate{footline}[frame number]		% Zum Ersetzen der Fußzeile mit einem einfachen Folienzähler kann diese Zeile auskommentiert werden
+
+\setbeamertemplate{navigation symbols}{}		% Zum Anzeigen der Navigationssymbole am unteren Rand aller Folien kann diese Zeile auskommentiert werden
+}
+
+% \usepackage{pgfpages}				% Zum Erstellen vernünftiger Ausdrucke/Handouts diese Zeile(n) unkommentieren
+% \pgfpagesuselayout{resize to}[a4paper,border shrink=5mm,landscape]	% Einseitiger Ausdruck auf A4
+% \pgfpagesuselayout{2 on 1}[a4paper,border shrink=5mm]			% Druckt 2 Folien auf 1 Seite A4
+% \pgfpagesuselayout{4 on 1}[a4paper,border shrink=5mm,landscape]		% Druckt 4 Folien auf 1 Seite A4
+% \pgfpagesuselayout{8 on 1}[a4paper,border shrink=5mm]			% Druckt 8 Folien auf 1 Seite A4
+% \pgfpagesuselayout{16 on 1}[a4paper,border shrink=5mm,landscape]		% Druckt 16 Folien auf 1 Seite A4
+
+% \setbeameroption{show notes on second screen=right}	% Zum Anzeigen von Notizen auf dem 2. Schirm.  Mit <location> = left, right, bottom oder top
+									% Benötigt das Paket pgfpages!
+
+\beamerdefaultoverlayspecification{<+->}		% Aufzählungen immer schrittweise zeigen
+
+% \setbeamercovered{transparent}			% Sorgt dafür, daß versteckte Textteile nicht unsichtbar, sondern mit wenig Kontast dargestellt werden
+
+\setbeamerfont{frametitle}{family=\sffamily,series=\bfseries,size={\fontsize{18.00}{20.00}}}	% Setzen der Schriftart und -größe für die Überschriften
+\setbeamerfont{footline}{family=\sffamily,series=\bfseries,size={\fontsize{6.00}{7.00}}}		% Setzen der Schriftart und -größe für die Fusszeile
+
+\usepackage[ngerman]{babel}				% für Deutsch
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}					% Erlaubt das Einbinden von Grafiken/Bildern
+\usepackage{eurosym}					% Erlaubt das Anzeigen des Eurosymbols
+\usepackage{xcolor}					% Erlaubt den Einsatz benutzerdefinierter Farben
+  % Weitere Einsatzmöglichkeiten:
+  % \textcolor{Farbe}{Text} entspricht Befehlen, wie \textbf{}
+  % \pagecolor{Name}, \pagecolor{model}{specification} setzt die Hintergrundfarbe der Seite
+  % \colorbox{Name}{Text}, \colorbox{model}{specification}{Text} hinterlegt den Text mit der Farbe
+  % \fcolorbox{Name}{Text}, \fcolorbox{model}{specification}{Text} umrandet den Text mit der Farbe
+  % vordefinierte Farben: black, white, red, green, blue, cyan, magenta, yellow
+
+\usepackage{colortbl}					% Erlaubt das Verwenden benutzerdefinierter Farben in Tabellen
+								% \cellcolor{farbe}, \rowcolor{farbe} oder \columncolor{farbe}
+
+\usepackage{url}						% Erlaubt das Verwenden von URLs ohne umständliche Maskierung
+\urlstyle{tt}							% Durch Verwendung von \urlstyle{tt} kann zusätzlich die Schriftart auf Typewriter gestellt werden
+\urldef{\fsog}{\url}{http://www.FreieSoftwareOG.org}	% Häufig vorkommende URLs können in einem Makro hinterlegt werden.
+
+\usepackage{booktabs}					% Erlaubt den Einsatz von \toprule, \midrule und \bottomrule innerhalb von Tabellen
+
+% Will man ein globales Hintergrundbild verwenden, muss dies in der Preamble definiert werden
+% Hier verwende ich das der FSOG
+\usebackgroundtemplate%
+{%
+    \includegraphics[width=\paperwidth,height=\paperheight]{../gemeinsam//Praesentationshintergrund}%
+}
+
+%----------------------------------------------------------------------------------------
+%	DEFINITION BENUTZERDEFINIERTER FARBEN (RGB)
+%----------------------------------------------------------------------------------------
+\definecolor{dunkelgrau}{rgb}{0.8,0.8,0.8}
+\definecolor{hellgrau}{rgb}{0.95,0.95,0.95}
+\definecolor{hellblau}{rgb}{0.8,0.85,1}
+\definecolor{dunkelblau}{rgb}{0,0,0.9}
+
+%----------------------------------------------------------------------------------------
+%	DEFINITION DER TITELFOLIE
+%----------------------------------------------------------------------------------------
+
+\title[FreieSoftwareOG.org - Videobearbeitung - Ein Überblick]{Videobearbeitung - Ein Überblick} % Der Kurztitel (in eckiger Klammer) erscheint im unteren Bereich aller Folien, der Haupttitel (in geschweifter Klammer) erscheint nur auf der Titelfolie
+
+\author{Edgar 'Fast Edi' Hoffmann}		% Name des Vortragenden
+\institute[FSOG]					% Die Institution. Erscheint am unteren Rand aller Folien, zum Platz sparen möglichst eine Abkürzung
+{
+Community FreieSoftwareOG \\			% Die Institution. Erscheint auf der Titelfolie
+\medskip
+\textit{kontakt@freiesoftwareog.org}		% Die Mailadresse. Erscheint auf der Titelfolie
+}
+\date{\today}					% Das Datum des Vortrags (hier: aktuelles Datum)
+
+%----------------------------------------------------------------------------------------
+%	ANFANG DES DOKUMENTES / DER PRÄSENTATION
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\begin{frame}[plain]			% Der Zusatz [plain] sorgt dafür, daß keine Seitenzahl/Fusszeile verwendet wird
+	\titlepage				% Ausgabe der Titelfolie als erste Folie
+\end{frame}
+
+% \begin{frame}					% Inhaltsfolie. Zum Anzeigen können diese Zeilen (von \begin bis \end) unkommentiert werden
+%	\frametitle{Inhalt der Präsentation}	% Wenn innerhalb der Präsentation \section{} und \subsection{} Befehle verwendet werden,
+%	\tableofcontents				% werden diese automatisch in diese Inhaltsfolie aufgenommen
+% \end{frame}
+
+%------------------------------------------------------------------------------------------
+%	AB HIER BEGINNT DIE EIGENTLICHE PRÄSENTATION
+%------------------------------------------------------------------------------------------
+
+\begin{frame}
+\frametitle{Videobearbeitung - Begriffserklärung}
+
+\pause
+Mit der Videobearbeitung wird das Ziel verfolgt, bewegte Bilder zu erstellen, die sich von dem Ausgangsmaterial unterscheiden.
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Wozu Videos bearbeiten?}
+
+\pause
+
+	\begin{itemize}
+		\item Entfernen von Werbeblocks
+		\item Verbessern des Ausgangsmaterials
+		\item Zusammenschneiden einzelner Sequenzen
+		\item Übergänge, Audio- oder Textkommentare hinzufügen
+	\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Videoformate}
+
+\pause
+Videoformat bezeichnet in der Videotechnik die Zusammenfassung audiovisuellen Spezifikationen eines Videos:\pause
+
+  	\begin{itemize}
+		\item Bildauflösung und das abgeleitete Seitenverhältnis
+		\item Farbtiefe
+		\item Bildwiederholungsrate
+		\item Tonspur
+	\end{itemize}
+
+\end{frame}
+
+ \begin{frame}
+
+\frametitle{Videoschnitt-Tools}
+
+\pause
+Ausser direkten Videoschnitt-Programmen kann man auch andere Tools als Hilfsprogramme einsetzen:\pause
+
+	\begin{itemize}
+		\item Blender (Linux, Windows)
+	\end{itemize}
+
+\end{frame}
+
+ \begin{frame}
+
+\frametitle{Videoschnitt-Software:\\Offline}
+
+\pause
+	\begin{itemize}
+		\item Avidemux (Linux, Windows, Mac)
+		\item VirtualDub (Windows)
+		\item Cinefx (Linux, Windows, Mac)
+		\item Cinelerra (Linux)
+		\item Lightworks (Linux, Windows)
+		\item Kdenlive (Linux, Mac)
+		\item Kino (Linux)
+		\item LiVES (Linux)
+		\item Openshot (Linux)
+		\item VideoLAN VLMC (Linux, Windows, Mac)\\...bisher nur angekündigt...
+	\end{itemize}
+
+\end{frame}
+
+ \begin{frame}
+
+\frametitle{Videoschnitt-Software:\\Online}
+
+\pause
+ 	
+	\begin{itemize}
+		\item Youtube Editor
+		\item Videnio - Online-Videobearbeitungsportal (deutsch)
+	\end{itemize}
+
+\end{frame}
+
+ \begin{frame}[fragile]		% Die "fragile"-Option muss verwendet werden, wenn auf der Folie verbatim verwendet wird
+\frametitle{Links zur Präsentation}
+
+	\begin{verbatim}
+		http://www.blender.org
+		http://www.avidemux.org
+		http://www.virtualdub.org
+		http://sourceforge.net/projects/cinefx/
+		http://www.cinelerra.org
+		http://www.kdenlive.org
+		http://www.kinodv.org
+		http://lives.sourceforge.net/
+		http://www.openshot.org
+		http://www.videolan.org
+	\end{verbatim}
+\end{frame}
+
+{		% Öffnende Klammer für das Folien-Hintergrundbild
+ \usebackgroundtemplate{\includegraphics[width=\paperwidth,height=\paperheight]{../gemeinsam/PraesentationshintergrundLetzteSeite}}%
+
+% { 		% Öffnenede Klammer für geänderte Fusszeile (nur auf dieser Folie)
+%	 \setbeamertemplate{footline}{Bilder/CC-BY-SA}
+
+\begin{frame}
+\frametitle{Weitere Informationen bekommen Sie hier:}
+	\begin{center}
+	\Large{
+		\fsog \\			% Makro für das Einfügen der URL (oben definiert)
+		und \\
+		Kontakt@FreieSoftwareOG.org \\~\\
+
+		oder kommen Sie doch einfach zu unserem regelmäßigen Treffen, \\
+		jeden 1. Mittwoch im Monat ab 20:00 Uhr. \\
+		(Treffpunkt und Thema laut Webseite)
+		}
+	\end{center}
+\end{frame}
+
+% }		% Schliessende Klammer für geänderte Fusszeile
+
+}		% Schliessende Klammer für das Folien-Hintergrundbild
+%------------------------------------------------------------------------------------------
+
+\end{document} 

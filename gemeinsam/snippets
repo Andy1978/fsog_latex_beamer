@@ -1,0 +1,58 @@
+% Die Beamer-Klasse wird mit einer Reihe von Standard Folienthemen,
+% mit unterschiedlichen Farben und Folienlayouts. Nachfolgend eine Liste aller verfügbaren Themen.
+% Hier kann das jeweils gewünschte Thema unkommentiert werden.
+
+\usetheme{default}
+% \usetheme{AnnArbor}
+% \usetheme{Antibes}
+% \usetheme{Bergen}
+% \usetheme{Berkeley}
+% \usetheme{Berlin}
+% \usetheme{Boadilla}
+% \usetheme{CambridgeUS}
+% \usetheme{Copenhagen}
+% \usetheme{Darmstadt}
+% \usetheme{Dresden}
+% \usetheme{Frankfurt}
+% \usetheme{Goettingen}
+% \usetheme{Hannover}
+% \usetheme{Ilmenau}
+% \usetheme{JuanLesPins}
+% \usetheme{Luebeck}
+% \usetheme{Madrid}
+% \usetheme{Malmoe}
+% \usetheme{Marburg}
+% \usetheme{Montpellier}
+% \usetheme{PaloAlto}
+% \usetheme{Pittsburgh}
+% \usetheme{Rochester}
+% \usetheme{Singapore}
+% \usetheme{Szeged}
+% \usetheme{Warsaw}
+
+% Neben verschiedenen Themen kommt die Beamer-Klasse auch mit diversen Farbvarianten
+% für jedes Folienthema daher. Hier kann das jeweils gewünschte Farbthema unkommentiert werden.
+
+% \usecolortheme{albatross}
+% \usecolortheme{beaver}
+% \usecolortheme{beetle}
+% \usecolortheme{crane}
+\usecolortheme{dolphin}
+% \usecolortheme{dove}
+% \usecolortheme{fly}
+% \usecolortheme{lily}
+% \usecolortheme{orchid}
+% \usecolortheme{rose}
+% \usecolortheme{seagull}
+% \usecolortheme{seahorse}
+% \usecolortheme{whale}
+% \usecolortheme{wolverine}
+
+
+% \usepackage{fontspec}					% Erlaubt das Anpassen von Schriftarten. Z.B. auch um eigene Fonts zu verwenden. MUSS MIT XELATEX KOMPILIERT WERDEN!!
+% \defaultfontfeatures{Mapping=tex-text}
+% \setmainfont{Yanone Kaffeesatz}			% (Haupt-)Schriftart der Präsentation
+
+%\usepackage{ngerman}
+%\usepackage[english]{babel}				% für Englisch
+%\usepackage[latin1]{inputenc}
