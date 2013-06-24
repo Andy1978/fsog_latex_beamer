@@ -10,6 +10,11 @@ clean:
 		$(MAKE) -C $$dir clean; \
 	done
 
+realclean:
+	for dir in $(SUBDIRS); do \
+		$(MAKE) -C $$dir realclean; \
+	done
+
 $(SUBDIRS):
 	$(MAKE) -C $@ $(__target__)
 

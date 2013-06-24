@@ -1,0 +1,132 @@
+%----------------------------------------------------------------------------------------
+%	PAKETE UND THEMEN
+%----------------------------------------------------------------------------------------
+
+\documentclass{beamer}
+
+\mode<presentation> {
+
+% Die Beamer-Klasse wird mit einer Reihe von Standard Folienthemen,
+% mit unterschiedlichen Farben und Folienlayouts. Nachfolgend eine Liste aller verfügbaren Themen.
+% Hier kann das jeweils gewünschte Thema unkommentiert werden.
+
+%\usetheme{default}
+% \usetheme{AnnArbor}
+% \usetheme{Antibes}
+% \usetheme{Bergen}
+% \usetheme{Berkeley}
+% \usetheme{Berlin}
+% \usetheme{Boadilla}
+% \usetheme{CambridgeUS}
+% \usetheme{Copenhagen}
+% \usetheme{Darmstadt}
+% \usetheme{Dresden}
+% \usetheme{Frankfurt}
+% \usetheme{Goettingen}
+% \usetheme{Hannover}
+% \usetheme{Ilmenau}
+% \usetheme{JuanLesPins}
+% \usetheme{Luebeck}
+ \usetheme{Madrid}
+% \usetheme{Malmoe}
+% \usetheme{Marburg}
+% \usetheme{Montpellier}
+% \usetheme{PaloAlto}
+% \usetheme{Pittsburgh}
+% \usetheme{Rochester}
+% \usetheme{Singapore}
+% \usetheme{Szeged}
+% \usetheme{Warsaw}
+
+% Neben verschiedenen Themen kommt die Beamer-Klasse auch mit diversen Farbvarianten
+% für jedes Folienthema daher. Hier kann das jeweils gewünschte Farbthema unkommentiert werden.
+
+% \usecolortheme{albatross}
+% \usecolortheme{beaver}
+% \usecolortheme{beetle}
+% \usecolortheme{crane}
+\usecolortheme{dolphin}
+% \usecolortheme{dove}
+% \usecolortheme{fly}
+% \usecolortheme{lily}
+% \usecolortheme{orchid}
+% \usecolortheme{rose}
+% \usecolortheme{seagull}
+% \usecolortheme{seahorse}
+% \usecolortheme{whale}
+% \usecolortheme{wolverine}
+
+%----------------------------------------------------------------------------------------
+%	DEFINITION BENUTZERDEFINIERTER FARBEN (RGB)
+%----------------------------------------------------------------------------------------
+\definecolor{dunkelgrau}{rgb}{0.8,0.8,0.8}
+\definecolor{hellgrau}{rgb}{0.95,0.95,0.95}
+\definecolor{hellblau}{rgb}{0.8,0.85,1}
+\definecolor{dunkelblau}{rgb}{0,0,0.9}
+
+% \setbeamertemplate{footline}				% Zum Entfernen der Fusszeile auf allen Folien kann diese Zeile unkommentiert werden
+\setbeamertemplate{footline}[frame number]		% Zum Ersetzen der Fußzeile mit einem einfachen Folienzähler kann diese Zeile auskommentiert werden
+
+\setbeamertemplate{navigation symbols}{}		% Zum Anzeigen der Navigationssymbole am unteren Rand aller Folien kann diese Zeile auskommentiert werden
+}
+
+\setbeamertemplate{background canvas} [vertical shading][top=hellblau, bottom=white] 
+
+% \usepackage{pgfpages}				% Zum Erstellen vernünftiger Ausdrucke/Handouts diese Zeile(n) unkommentieren
+% \pgfpagesuselayout{resize to}[a4paper,border shrink=5mm,landscape]	% Einseitiger Ausdruck auf A4
+% \pgfpagesuselayout{2 on 1}[a4paper,border shrink=5mm]			% Druckt 2 Folien auf 1 Seite A4
+% \pgfpagesuselayout{4 on 1}[a4paper,border shrink=5mm,landscape]		% Druckt 4 Folien auf 1 Seite A4
+% \pgfpagesuselayout{8 on 1}[a4paper,border shrink=5mm]			% Druckt 8 Folien auf 1 Seite A4
+% \pgfpagesuselayout{16 on 1}[a4paper,border shrink=5mm,landscape]		% Druckt 16 Folien auf 1 Seite A4
+
+% \setbeameroption{show notes on second screen=right}	% Zum Anzeigen von Notizen auf dem 2. Schirm.  Mit <location> = left, right, bottom oder top
+									% Benötigt das Paket pgfpages!
+
+%\beamerdefaultoverlayspecification{<+->}		% Aufzählungen immer schrittweise zeigen
+
+% \setbeamercovered{transparent}			% Sorgt dafür, daß versteckte Textteile nicht unsichtbar, sondern mit wenig Kontast dargestellt werden
+
+\setbeamerfont{frametitle}{family=\sffamily,series=\bfseries,size={\fontsize{18.00}{20.00}}}	% Setzen der Schriftart und -größe für die Überschriften
+\setbeamerfont{footline}{family=\sffamily,series=\bfseries,size={\fontsize{6.00}{7.00}}}		% Setzen der Schriftart und -größe für die Fusszeile
+
+\usepackage[ngerman]{babel}				% für Deutsch
+%\usepackage{ngerman}
+%\usepackage[english]{babel}				% für Englisch
+%\usepackage[latin1]{inputenc}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}					% Erlaubt das Einbinden von Grafiken/Bildern
+\usepackage{eurosym}					% Erlaubt das Anzeigen des Eurosymbols
+\usepackage{xcolor}					% Erlaubt den Einsatz benutzerdefinierter Farben
+								% Weitere Einsatzmöglichkeiten:
+								% \textcolor{Farbe}{Text} entspricht Befehlen, wie \textbf{}
+								% \pagecolor{Name}, \pagecolor{model}{specification} setzt die Hintergrundfarbe der Seite
+								% \colorbox{Name}{Text}, \colorbox{model}{specification}{Text} hinterlegt den Text mit der Farbe
+								% \fcolorbox{Name}{Text}, \fcolorbox{model}{specification}{Text} umrandet den Text mit der Farbe
+								% vordefinierte Farben: black, white, red, green, blue, cyan, magenta, yellow
+
+\usepackage{colortbl}					% Erlaubt das Verwenden benutzerdefinierter Farben in Tabellen
+								% \cellcolor{farbe}, \rowcolor{farbe} oder \columncolor{farbe}
+
+\usepackage{url}						% Erlaubt das Verwenden von URLs ohne umständliche Maskierung
+\urlstyle{tt}							% Durch Verwendung von \urlstyle{tt} kann zusätzlich die Schriftart auf Typewriter gestellt werden
+\urldef{\fsog}{\url}{http://www.FreieSoftwareOG.org}	% Häufig vorkommende URLs können in einem Makro hinterlegt werden.
+
+\usepackage{booktabs}					% Erlaubt den Einsatz von \toprule, \midrule und \bottomrule innerhalb von Tabellen
+
+% \usepackage{fontspec}					% Erlaubt das Anpassen von Schriftarten. Z.B. auch um eigene Fonts zu verwenden. MUSS MIT XELATEX KOMPILIERT WERDEN!!
+% \defaultfontfeatures{Mapping=tex-text}
+% \setmainfont{Yanone Kaffeesatz}			% (Haupt-)Schriftart der Präsentation
+
+% Will man ein globales Hintergrundbild verwenden, muss dies in der Preamble definiert werden
+% Hier verwende ich das der FSOG
+%\usebackgroundtemplate%
+%{
+%  \includegraphics[width=\paperwidth,height=\paperheight]{../gemeinsam/Praesentationshintergrund}%
+%}
+
+\usepackage{pgf}  
+\logo{\pgfputat{\pgfxy(-1.2,-0.2)}{\pgfbox[center,base]{\includegraphics[width=2.6cm]{../gemeinsam/fsog.png}}}}  
+
+%\logo{\includegraphics[width=3cm]{../gemeinsam/fsog.png}}
+
+
