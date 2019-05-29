@@ -14,3 +14,7 @@ Abhängigkeiten
 *  Latex compiler
 *  latexmk
 
+z.B. unter Debian GNU/Linux
+
+```sudo apt-get install texlive-lang-german latexmk```
+
