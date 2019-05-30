@@ -16,5 +16,5 @@ Abhängigkeiten
 
 z.B. unter Debian GNU/Linux
 
-```sudo apt-get install texlive-lang-german texlive-latex-recommended latexmk```
+```sudo apt-get install texlive-lang-german texlive-latex-recommended texlive-latex-extra latexmk```
 
