@@ -1,0 +1,13 @@
+
+* was ist systemd?
+
+* allgemiene Vor-/Nachteile; Diskussion (Stichwort: devuan)
+
+* praktische Verwendung: wichtige Kommandos (start/enable; journalctl; ...)
+
+* Vergleich: Kommando bei init/systemd
+
+* Wie schreibe ich selbst eine kleine regel (automount oder sowas)
+
+* Systemstart beschleunigen: systemd-analyze blame/critical-chain
+

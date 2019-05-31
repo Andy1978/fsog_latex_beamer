@@ -1,0 +1,247 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Beamer Präsentation
+% LaTeX Vorlage
+% Version 1.0 (10/11/12)
+%
+% Diese Vorlage wurde heruntergeladen von:
+% http://www.LaTeXTemplates.com
+%
+% Lizenz:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\input{../gemeinsam/common_settings}
+
+%----------------------------------------------------------------------------------------
+% DEFINITION DER TITELFOLIE
+%----------------------------------------------------------------------------------------
+
+\title[section77 e.V. - systemd]{systemd} % Der Kurztitel (in eckiger Klammer) erscheint im unteren Bereich aller Folien, der Haupttitel (in geschweifter Klammer) erscheint nur auf der Titelfolie
+      
+\author{Justin und Andy}        % Name des Vortragenden
+\institute[section77 e.V.]    % Die Institution. Erscheint am unteren Rand aller Folien, zum Platz sparen möglichst eine Abkürzung
+{
+Community section77 e.V. \\  % Die Institution. Erscheint auf der Titelfolie
+\medskip
+\textit{section77@josoansi.de}    % Die Mailadresse. Erscheint auf der Titelfolie
+}
+\date{\today}                 % Das Datum des Vortrags (hier: aktuelles Datum)
+
+%----------------------------------------------------------------------------------------
+% ANFANG DES DOKUMENTES / DER PRÄSENTATION
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\begin{frame}      % Der Zusatz [plain] sorgt dafür, daß keine Seitenzahl/Fusszeile verwendet wird
+  \titlepage        % Ausgabe der Titelfolie als erste Folie
+\end{frame}
+
+% \begin{frame}         % Inhaltsfolie. Zum Anzeigen können diese Zeilen (von \begin bis \end) unkommentiert werden
+% \frametitle{Inhalt der Präsentation}  % Wenn innerhalb der Präsentation \section{} und \subsection{} Befehle verwendet werden,
+% \tableofcontents        % werden diese automatisch in diese Inhaltsfolie aufgenommen
+% \end{frame}
+
+%------------------------------------------------------------------------------------------
+% AB HIER BEGINNT DIE EIGENTLICHE PRÄSENTATION
+%------------------------------------------------------------------------------------------
+
+\begin{frame}
+\frametitle{Sicheres Löschen - Begriffserklärung}
+
+Unter Sicherem Löschen versteht man das Entfernen von Dateien und/oder Ordnern von einem Datenträger, ohne daß diese wiederhergestellt werden können.\\ \pause
+Oder das Löschen eines kompletten Datenträgers mit derselben Intention.
+\end{frame}
+
+\begin{frame}
+  \frametitle{Warum sicheres Löschen?}
+  \begin{itemize}
+    \item Private Weitergabe bzw. Verkauf oder Entsorgung gebrauchter Hardware
+    \item Schützen von Geschäftsdaten
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Wie werden Dateien verwaltet?}
+  %\includegraphics[width=0.9\linewidth]{Bilder/defragmentierung}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Was sollte/muß gelöscht werden?}
+  \begin{itemize}
+    \item Einzelne Dateien
+    \item Der gesamte Datenträger
+    \item Der MBR
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+
+% Hier können Notizen für den Vortragenden auf einem 2. Schirm angezeigt werden. Benötigt die Definition:
+% \setbeameroption{show notes on second screen=<location>}
+% Mit <location> = left, right, bottom oder top
+
+\note[item]{Weil SSDs/USB-Sticks anders speichern als Festplatten. Deren Verhalten ist sehr Fabrikats- und Hersteller-abhängig. Grundsätzlich ist es bei diesen Speichern nicht möglich, gezielt Blöcke auf dem Speicher zu überschreiben. Weder wipe noch shred funktionieren mit diesen Platten, wenn man nur einzelne Dateien sicher entfernen möchte. Man sollte bei diesen vorsorgen und anstatt wichtige Dateien zu überschreiben, von Anfang an die entsprechenden Daten nur in verschlüsselter Form ablegen.}
+\note[item]{ext3/4 und reiserfs erstellen immer ein Meta-Journal, welches Meta-Daten (unter anderem die Namen von Dateien) beinhalten kann.}
+
+\frametitle{Stolpersteine}
+  \begin{itemize}
+    \item Flash-Speicher
+    \begin{itemize}
+      \item SSDs (ältere Modelle)
+      \item USB-Sticks
+    \end{itemize}
+    \item Defekte Sektoren
+    \item Journaling
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+  \note[item]{Wear-Leveling = Daten werden gleichmäßig verteilt}
+  \note[item]{Sicher ist es also nur, wenn der gesamte Flash-Speicher überschrieben wird}
+  \frametitle{Stolperstein:\\Flash-Speicher (SSDs und USB-Sticks)}
+  \begin{itemize}
+    \item Verhalten ist stark Fabrikats- bzw. Herstellerabhängig
+    \item Grundsätzlich ist es nicht möglich, gezielt Blöcke auf dem Speicher zu überschreiben
+    \item Schreibzyklen sind (je nach Bauart) begrenzt
+    \item Deshalb wird Wear-Leveling vom integrierten Controller verwendet
+    \item Moderne Flash-Speicher verwenden eine interne Garbage Collection des Controllers
+    \item oder den TRIM-Befehl des Betriebssystems
+  \end{itemize}
+  \pause
+  \begin{alertblock}{Deshalb}
+    {\bf Verschlüsseln} (Einzelne Dateien oder ganze Partition).
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}
+  \note[item]{Defekte Sektoren werden solange nicht bemerkt, wie noch Erstzsektoren bereit stehen.}
+  \frametitle{Stolperstein:\\Defekte Sektoren}
+  \begin{itemize}
+    \item Controller verwaltet diese gegenüber dem Betriebssystem transparent
+    \item Daten in defekten Sektoren bleiben erhalten
+    \item Kontrolle vorhandener defekter Sektoren ist möglich
+    \begin{itemize}
+      \item mit \textit{smartmontools}
+      \item z.B. \textit{smartctl -a sda}
+      \item z.B. \textit{smartctl -a sda  grep Reallocated\_Sector\_Ct}
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \note[item]{Nochmal Hinweis auf Verschlüsselung}
+  \frametitle{Stolperstein:\\Journaling}
+  \begin{itemize}
+    \item ext3/4 sowie reiserfs erstellen ein Meta-Journal
+    \item Manche Dateisysteme und Journal-Modi speichern sogar ganze Dateien im Journal, welche dann auch aus dem Journal wieder rekonstruiert werden können, obwohl sie auf der Festplatte vollständig gelöscht und sogar mit wipe überschrieben wurden...
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \note[item]{MBR muss im Schadensfall (Trojaner, etc.) neu angelegt werden. Dann aber auch keine Rekonstruktion mehr möglich!}
+  \frametitle{Stolperstein:\\MBR (Master Boot Record)}
+  \begin{itemize}
+    \item Das Löschen einzelner Dateien oder Verzeichnisse hat keinen Einfluss auf diesen Bereich
+    \item Schadprogramme setzen sich hier fest
+    \item Löschen von Partitionen bzw. Formatieren der Festplatte nützt nichts
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Löschmethoden}
+  \begin{itemize}
+    \item Gutmann-Methode (1996)
+    \item Russian GOST P50739-95
+    \item Bruce Schneier's Algorithm
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Die Mär vom 35-fachen Überschreiben}
+  Ist es wirklich notwendig, einen Datenträger 35-fach zu überschrieben, um sicher zu sein, daß nichts mehr rekonstruierbar ist?
+  \pause
+  \begin{alertblock}{Craig Wright behauptet}
+    {\bf NEIN!} (Studie von 2009).
+  \end{alertblock}
+  \pause
+  Bereits das einmalige Überschreiben lässt keine Chance für Forensiker
+\end{frame}
+
+\begin{frame}
+  \note[item]{shred: Arbeitet nach Gutmann-Methode, kann keine Ordner löschen.}
+  \note[item]{Secure Remove: Steht für Debian/Ubuntu im Paket secure-delete bereit.}
+  \frametitle{Werkzeuge für sicheres Löschen\\(einzelne Dateien)}
+  \begin{itemize}
+    \item shred
+      \begin{itemize}
+        \item shred -vun \textit{Durchgänge} \textit{Datei1  Datei2}
+        \item find \textit{Verzeichnis} -type f -print0 \textbar ~xargs -0 shred -vun \textit{Durchg.}
+      \end{itemize}
+    \item wipe
+      \begin{itemize}
+        \item wipe \textit{datei.jpg}
+        \item wipe -r \textit{Ordner/}
+      \end{itemize}
+    \item Secure Remove
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Werkzeuge für sicheres Löschen\\(ganze Datenträger)}
+  \begin{itemize}
+    \item dd
+      \begin{itemize}
+        \item dd \path{if=/dev/zero} \path{of=/dev/sda}
+        \item dd \path{if=/dev/urandom} \path{of=/dev/sda}
+      \end{itemize}
+    \item shred
+      \begin{itemize}
+        \item shred -vn \textit{Durchgänge} \textit{Gerät}
+      \end{itemize}
+    \item wipe
+      \begin{itemize}
+        \item wipe -k \path{/dev/sda7}
+      \end{itemize}
+    \item Plattenputzer
+    \item DBAN
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Werkzeuge für sicheres Löschen\\(ganze Datenträger)}
+  %\includegraphics[width=0.9\linewidth]{Bilder/HDDFragmente}
+\end{frame}
+
+\begin{frame}[fragile]   % Die "fragile"-Option muss verwendet werden, wenn auf der Folie verbatim verwendet wird
+\frametitle{Links zur Präsentation}
+  \begin{verbatim}
+    http://www.dban.org
+    http://link.springer.com/chapter/10.1007%2F978-3-540-89862-7_21
+    http://plattenputzer.sourceforge.net
+    http://srm.sourceforge.net
+    http://wiki.ubuntuusers.de/Daten_sicher_l%C3%B6schen
+  \end{verbatim}
+\end{frame}
+
+\begin{frame}
+\frametitle{Weitere Informationen bekommen Sie hier:}
+  \begin{center}
+  \Large{
+    \fsog \\      % Makro für das Einfügen der URL (oben definiert)
+    und \\
+    Kontakt@FreieSoftwareOG.org \\~\\
+
+    oder kommen Sie doch einfach zu unserem regelmäßigen Treffen, \\
+    jeden 1. Mittwoch im Monat ab 20:00 Uhr. \\
+    (Treffpunkt und Thema laut Webseite)
+    }
+  \end{center}
+  \begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.2\textwidth]{../gemeinsam/CC-BY-SA.png}
+  \end{figure}  
+\end{frame}
+\end{document}
