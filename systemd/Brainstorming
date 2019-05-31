@@ -1,3 +1,5 @@
+Links:
+  http://www.linux-magazine.com/Issues/2017/200/Tutorials-Systemd
 
 * was ist systemd?
 
@@ -9,5 +11,29 @@
 
 * Wie schreibe ich selbst eine kleine regel (automount oder sowas)
 
-* Systemstart beschleunigen: systemd-analyze blame/critical-chain
+* Systemstart beschleunigen:
 
+  https://www.freedesktop.org/software/systemd/man/systemd-analyze.html
+
+  $ systemd-analyze time
+  Startup finished in 14.570s (firmware) + 1.819s (loader) + 2.935s (kernel) + 38.222s (userspace) = 57.547s
+
+  $ systemd-analyze blame
+   22.669s apt-daily-upgrade.service
+   13.259s systemd-cryptsetup@home_crypt.service
+    1.953s apt-daily.service
+     537ms docker.service
+     436ms keyboard-setup.service
+     265ms exim4.service
+     214ms dev-nvme0n1p2.device
+     165ms phpsessionclean.service
+     157ms minidlna.service
+     133ms systemd-timesyncd.service
+      94ms apache2.service
+
+  $ systemd-analyze critical-chain
+
+  
+  $ systemd-analyze plot > foo.svg
+  (Bildausschnitt in die Präsentation einfügen)
+  ristretto foo.svg
