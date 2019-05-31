@@ -1,4 +1,4 @@
-SUBDIRS = Backup_und_Recovery Sicheres_Loeschen Videobearbeitung
+SUBDIRS = Backup_und_Recovery Sicheres_Loeschen Videobearbeitung systemd
 
 .PHONY: subdirs $(SUBDIRS)
 .PHONY: clean realclean
