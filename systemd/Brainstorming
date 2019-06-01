@@ -1,5 +1,6 @@
 Links:
   http://www.linux-magazine.com/Issues/2017/200/Tutorials-Systemd
+  https://wiki.debian.org/systemd/Services
 
 * was ist systemd?
 
@@ -11,6 +12,8 @@ Links:
   (SysVinit)
 
 * Wie schreibe ich selbst eine kleine Regel (automount oder sowas)
+
+  curl https://demo.volkszaehler.org/middleware.php/data/33a31710-7019-11e9-9024-8ba88e33a917.json | jq '.data.tuples[-1]'
 
 * Systemstart beschleunigen:
 

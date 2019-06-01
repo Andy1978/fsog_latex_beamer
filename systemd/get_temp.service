@@ -1,0 +1,8 @@
+[Unit]
+Description=read temperature service
+After=systemd-user-sessions.service
+
+[Service]
+Type=simple
+User=andy
+ExecStart=/home/andy/src/fsog_latex_beamer/systemd/get_temp.sh
