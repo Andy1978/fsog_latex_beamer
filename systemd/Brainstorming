@@ -26,6 +26,8 @@ Links:
 
 * praktische Verwendung: wichtige Kommandos (start/enable; journalctl; ...)
 
+  journalctl -p err..alert
+
 * Vergleich: Kommando bei init/systemd
   (SysVinit)
 
