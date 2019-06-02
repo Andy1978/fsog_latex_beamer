@@ -4,7 +4,25 @@ Links:
 
 * was ist systemd?
 
-* allgemiene Vor-/Nachteile; Diskussion (Stichwort: devuan)
+* allgemeine Vor-/Nachteile; Diskussion (Stichwort: devuan)
+
+  ich habe noch einen admin zu seiner Meinug gefragt,
+  was aus seiner Sicht bei systemd besser gelöst ist als SysVInit:
+
+  "Hm, mir fällt ziemlich weit vorne ein: Logging.
+  journalctl -u modul
+  finde ich richtig cool. Dann noch die Ausgabe der Stati der
+  Systemdienste, dass nicht nur angezeigt wird läuft/läuft nicht,
+  sondern auch ein Auszug der Meldungen zum Dienstezustand.
+  Und eine standardisierte Vorgehensweise, um auf verschiedenen
+  Derivaten Dienste beim Systemstart zu aktivieren/deaktivieren.
+  - chkconfig apache2 on
+  - ln -s /srv/apache2/bin/start.sh /etc/rc3.d/apache2
+  - vs. skeleton kopieren, anpassen und an die richtige Stelle verschieben
+  - vs. systemctl enable apache2.service...
+
+  binäre logfiles sind halt dumm aber daran habe ich mich gewöhnt"
+
 
 * praktische Verwendung: wichtige Kommandos (start/enable; journalctl; ...)
 
