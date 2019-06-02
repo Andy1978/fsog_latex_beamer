@@ -30,6 +30,23 @@ Links:
 
 * Vergleich: Kommando bei init/systemd
   (SysVinit)
+  Start eines Dienstes:
+  - init:
+    - /etc/init.d/<dienst> start
+    - /etc/init.d/apache2 start
+  - systemd:
+    - systemctl start <dienst>
+    - systemctl start apache2
+
+  Aktivieren eines Dienstes (automatischer Start beim Boot):
+  - RedHat-Style:
+    chkconfig 235 httpd
+  - SysVinit-Style:
+    ln -s /etc/init.d/apache2 /etc/rc2.d # (und das Ganze nochmal für die
+      # runlevel 3 und 5)
+  - systemd:
+    systemctl enable apache2
+
 
 * Wie schreibe ich selbst eine kleine Regel (automount oder sowas)
 
@@ -57,7 +74,7 @@ Links:
 
   $ systemd-analyze critical-chain
 
-  
+
   $ systemd-analyze plot > foo.svg
   (Bildausschnitt in die Präsentation einfügen)
   ristretto foo.svg
