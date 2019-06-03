@@ -3,6 +3,26 @@ Links:
   https://wiki.debian.org/systemd/Services
 
 * was ist systemd?
+  ein Daemon, der als Init-Prozess - als erster Prozess - zum Starten,
+  Überwachen und Beenden weiterer Prozesse dient
+  in den Standard-Distros inzwischen enthalten und dort zum Default geworden:
+  SLES (seit 12)
+  Debian (seit 8)
+  Ubuntu (seit 15.04)
+  Fedora (seit 15)
+  OpenSuse (seit 12.1)
+  RHEL (seit 7)
+  Arch (seit Okt. 2012)
+
+* Vorteile:
+  - höhere Geschwindigkeit beim Start des Systems
+  - vereinfachte Schnittstelle zur Steuerung der Dienste und Betrachtung der
+    Logfiles
+
+* Nachteile:
+  - bricht das Basiskonzept "ein Programm soll ein Problem lösen, dieses aber
+    möglichst gut"
+  - speichert Logdateien im Binärformat, nicht als Text
 
 * allgemeine Vor-/Nachteile; Diskussion (Stichwort: devuan)
 
@@ -25,6 +45,12 @@ Links:
 
 
 * praktische Verwendung: wichtige Kommandos (start/enable; journalctl; ...)
+
+  systemctl start apache2
+
+  systemctl enable apache2
+
+  systemctl status
 
   journalctl -p err..alert
 
