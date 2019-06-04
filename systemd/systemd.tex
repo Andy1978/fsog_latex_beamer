@@ -19,12 +19,11 @@
 
 \title[section77 e.V. - systemd]{systemd} % Der Kurztitel (in eckiger Klammer) erscheint im unteren Bereich aller Folien, der Haupttitel (in geschweifter Klammer) erscheint nur auf der Titelfolie
       
-\author{Justin und Andy}        % Name des Vortragenden
+\author{von Justin und Andy}        % Name des Vortragenden
 \institute[section77 e.V.]    % Die Institution. Erscheint am unteren Rand aller Folien, zum Platz sparen möglichst eine Abkürzung
 {
 Community section77 e.V. \\  % Die Institution. Erscheint auf der Titelfolie
 \medskip
-\textit{section77@josoansi.de}    % Die Mailadresse. Erscheint auf der Titelfolie
 }
 \date{\today}                 % Das Datum des Vortrags (hier: aktuelles Datum)
 
@@ -48,52 +47,110 @@ Community section77 e.V. \\  % Die Institution. Erscheint auf der Titelfolie
 %------------------------------------------------------------------------------------------
 
 \begin{frame}
-\frametitle{Sicheres Löschen - Begriffserklärung}
+\frametitle{was ist systemd?}
+ein Daemon, der als Init-Prozess - als erster Prozess - zum Starten, Überwachen
+und Beenden weiterer Prozesse dient.
 
-Unter Sicherem Löschen versteht man das Entfernen von Dateien und/oder Ordnern von einem Datenträger, ohne daß diese wiederhergestellt werden können.\\ \pause
-Oder das Löschen eines kompletten Datenträgers mit derselben Intention.
+In den Standard-Distros inzwischen enthalten und dort zum Default geworden:
+
+\begin{itemize}
+  \item SLES (seit 12)
+  \item Debian (seit 8)
+  \item Ubuntu (seit 15.04)
+  \item Fedora (seit 15)
+  \item OpenSuse (seit 12.1)
+  \item RHEL (seit 7)
+  \item Arch (seit Okt. 2012)
+\end{itemize}
+
 \end{frame}
 
 \begin{frame}
-  \frametitle{Warum sicheres Löschen?}
+  \frametitle{Vorteile}
   \begin{itemize}
-    \item Private Weitergabe bzw. Verkauf oder Entsorgung gebrauchter Hardware
-    \item Schützen von Geschäftsdaten
+    \item höhere Geschwindigkeit beim Start des Systems durch parallel gestartete
+          Prozesse. Dies macht besonders bei Mehrkernprozessoren Sinn
+    \item systemd kümmert sich um eine Strategie wie die Prozesse nacheinander
+          gestartet werden können. Der Anwender gibt einfach nur an welche anderen Prozesse benötigt werden
+    \item vereinfachte Schnittstelle zur Steuerung der Dienste und Betrachtung der Logfiles
   \end{itemize}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Wie werden Dateien verwaltet?}
-  %\includegraphics[width=0.9\linewidth]{Bilder/defragmentierung}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Was sollte/muß gelöscht werden?}
+  \frametitle{Nachteile}
   \begin{itemize}
-    \item Einzelne Dateien
-    \item Der gesamte Datenträger
-    \item Der MBR
+    \item bricht das Basiskonzept "ein Programm soll ein Problem lösen, dieses aber möglichst gut". 
+    \item speichert Logdateien im Binärformat, nicht als Text
+    \item systemd wurde schon mehrfach nachgesagt, es spalte die Community (Stichwort Devuan). Teilweise richtet
+  sich dies direkt gegen die zwei Haupentwickler. Auch Linus Torvalds hat sich schon zu Wort gemeldet (0day patch)
   \end{itemize}
+
 \end{frame}
 
-\begin{frame}
+\begin{frame}[fragile]
 
-% Hier können Notizen für den Vortragenden auf einem 2. Schirm angezeigt werden. Benötigt die Definition:
-% \setbeameroption{show notes on second screen=<location>}
-% Mit <location> = left, right, bottom oder top
+\frametitle{Vergleich: Kommando bei init/systemd}
 
-\note[item]{Weil SSDs/USB-Sticks anders speichern als Festplatten. Deren Verhalten ist sehr Fabrikats- und Hersteller-abhängig. Grundsätzlich ist es bei diesen Speichern nicht möglich, gezielt Blöcke auf dem Speicher zu überschreiben. Weder wipe noch shred funktionieren mit diesen Platten, wenn man nur einzelne Dateien sicher entfernen möchte. Man sollte bei diesen vorsorgen und anstatt wichtige Dateien zu überschreiben, von Anfang an die entsprechenden Daten nur in verschlüsselter Form ablegen.}
-\note[item]{ext3/4 und reiserfs erstellen immer ein Meta-Journal, welches Meta-Daten (unter anderem die Namen von Dateien) beinhalten kann.}
-
-\frametitle{Stolpersteine}
+  Start eines Dienstes
   \begin{itemize}
-    \item Flash-Speicher
-    \begin{itemize}
-      \item SSDs (ältere Modelle)
-      \item USB-Sticks
-    \end{itemize}
-    \item Defekte Sektoren
-    \item Journaling
+    \item init:
+    \begin{verbatim}
+    $ /etc/init.d/apache2 start
+    \end{verbatim}
+
+    \item systemd:
+    \begin{verbatim}
+    $ systemctl start apache2
+    \end{verbatim}
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Vergleich: Kommando bei init/systemd}
+
+  Aktivieren eines Dienstes (automatischer Start beim Boot):
+  \begin{itemize}
+
+    \item RedHat-Style:
+    \begin{verbatim}
+    $ chkconfig 235 httpd
+    \end{verbatim}
+
+    \item SysVinit-Style:
+    \begin{verbatim}
+    $ ln -s /etc/init.d/apache2 /etc/rc2.d
+    # (und das Ganze nochmal für die runlevel 3 und 5)
+    \end{verbatim}
+
+    \item systemd:
+    \begin{verbatim}
+    $ systemctl enable apache2
+    \end{verbatim}
+
+  \end{itemize}
+
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Status/Logging}
+
+  \begin{itemize}
+
+    \item Ohne systemd:
+    \begin{verbatim}
+    $ less /var/log/...
+    \end{verbatim}
+    oder mit grep in den logfiles suchen
+
+    \item Mit systemd:
+    \begin{verbatim}
+    $ systemctl status apache2
+    $ journalctl -u apache2
+    $ journalctl -p err..alert
+    \end{verbatim}
+
   \end{itemize}
 
 \end{frame}
@@ -218,11 +275,8 @@ Oder das Löschen eines kompletten Datenträgers mit derselben Intention.
 \begin{frame}[fragile]   % Die "fragile"-Option muss verwendet werden, wenn auf der Folie verbatim verwendet wird
 \frametitle{Links zur Präsentation}
   \begin{verbatim}
-    http://www.dban.org
-    http://link.springer.com/chapter/10.1007%2F978-3-540-89862-7_21
-    http://plattenputzer.sourceforge.net
-    http://srm.sourceforge.net
-    http://wiki.ubuntuusers.de/Daten_sicher_l%C3%B6schen
+    http://www.linux-magazine.com/Issues/2017/200/Tutorials-Systemd
+    https://wiki.debian.org/systemd/Services
   \end{verbatim}
 \end{frame}
 
