@@ -18,7 +18,7 @@
 %----------------------------------------------------------------------------------------
 
 \title[section77 e.V. - systemd]{systemd} % Der Kurztitel (in eckiger Klammer) erscheint im unteren Bereich aller Folien, der Haupttitel (in geschweifter Klammer) erscheint nur auf der Titelfolie
-      
+
 \author{von Justin und Andy}        % Name des Vortragenden
 \institute[section77 e.V.]    % Die Institution. Erscheint am unteren Rand aller Folien, zum Platz sparen möglichst eine Abkürzung
 {
@@ -79,7 +79,7 @@ In den Standard-Distros inzwischen enthalten und dort zum Default geworden:
 \begin{frame}
   \frametitle{Nachteile}
   \begin{itemize}
-    \item bricht das Basiskonzept "ein Programm soll ein Problem lösen, dieses aber möglichst gut". 
+    \item bricht das Basiskonzept "ein Programm soll ein Problem lösen, dieses aber möglichst gut".
     \item speichert Logdateien im Binärformat, nicht als Text
     \item systemd wurde schon mehrfach nachgesagt, es spalte die Community (Stichwort Devuan). Teilweise richtet
   sich dies direkt gegen die zwei Haupentwickler. Auch Linus Torvalds hat sich schon zu Wort gemeldet (0day patch)
@@ -155,138 +155,127 @@ In den Standard-Distros inzwischen enthalten und dort zum Default geworden:
 
 \end{frame}
 
-\begin{frame}
-  \note[item]{Wear-Leveling = Daten werden gleichmäßig verteilt}
-  \note[item]{Sicher ist es also nur, wenn der gesamte Flash-Speicher überschrieben wird}
-  \frametitle{Stolperstein:\\Flash-Speicher (SSDs und USB-Sticks)}
-  \begin{itemize}
-    \item Verhalten ist stark Fabrikats- bzw. Herstellerabhängig
-    \item Grundsätzlich ist es nicht möglich, gezielt Blöcke auf dem Speicher zu überschreiben
-    \item Schreibzyklen sind (je nach Bauart) begrenzt
-    \item Deshalb wird Wear-Leveling vom integrierten Controller verwendet
-    \item Moderne Flash-Speicher verwenden eine interne Garbage Collection des Controllers
-    \item oder den TRIM-Befehl des Betriebssystems
-  \end{itemize}
-  \pause
-  \begin{alertblock}{Deshalb}
-    {\bf Verschlüsseln} (Einzelne Dateien oder ganze Partition).
-  \end{alertblock}
+\begin{frame}[fragile]
+\frametitle{Ein einfacher service}
+
+  Ein Skript, welches alle 15s die Außentemperatur bei Justin abfrägt (get\_temp.sh)
+  soll beim Systemstart automatisch im Hintergrund gestartet werden:
+
+\begin{verbatim}
+[Unit]
+Description=read outdoor temperature service
+After=systemd-user-sessions.service
+
+[Service]
+Type=simple
+User=andy
+ExecStart=/home/andy/src/fsog_latex_beamer/systemd/get_temp.sh
+
+[Install]
+WantedBy=multi-user.target
+\end{verbatim}
+
 \end{frame}
 
-\begin{frame}
-  \note[item]{Defekte Sektoren werden solange nicht bemerkt, wie noch Erstzsektoren bereit stehen.}
-  \frametitle{Stolperstein:\\Defekte Sektoren}
-  \begin{itemize}
-    \item Controller verwaltet diese gegenüber dem Betriebssystem transparent
-    \item Daten in defekten Sektoren bleiben erhalten
-    \item Kontrolle vorhandener defekter Sektoren ist möglich
-    \begin{itemize}
-      \item mit \textit{smartmontools}
-      \item z.B. \textit{smartctl -a sda}
-      \item z.B. \textit{smartctl -a sda  grep Reallocated\_Sector\_Ct}
-    \end{itemize}
-  \end{itemize}
+\begin{frame}[fragile]
+
+An die richtige Stelle kopieren und starten
+\begin{verbatim}
+$ sudo cp get_temp.service /etc/systemd/system
+$ sudo systemctl start get_temp
+$ sudo systemctl status get_temp
+\end{verbatim}
+
+Beim Systemstart mit starten:
+\begin{verbatim}
+$ sudo systemctl enable get_temp.service
+\end{verbatim}
+
 \end{frame}
 
-\begin{frame}
-  \note[item]{Nochmal Hinweis auf Verschlüsselung}
-  \frametitle{Stolperstein:\\Journaling}
-  \begin{itemize}
-    \item ext3/4 sowie reiserfs erstellen ein Meta-Journal
-    \item Manche Dateisysteme und Journal-Modi speichern sogar ganze Dateien im Journal, welche dann auch aus dem Journal wieder rekonstruiert werden können, obwohl sie auf der Festplatte vollständig gelöscht und sogar mit wipe überschrieben wurden...
-  \end{itemize}
+\begin{frame}[fragile]
+  \frametitle{Systemstart beschleunigen}
+
+  Das folgende ist eine echte Analyse meines Arbeitsplatzrechners, kein Fake.
+\begin{verbatim}
+  $ systemd-analyze time
+  Startup finished in 3.584s (kernel) + 20.245s (userspace)
+  = 23.830s
+
+  $ systemd-analyze blame
+          9.533s NetworkManager-wait-online.service
+          7.600s docker.service
+          5.014s apt-daily.service
+          3.804s apt-daily-upgrade.service
+          1.546s exim4.service
+          1.192s snapd.autoimport.service
+           988ms ModemManager.service
+           921ms dev-sda1.device
+           843ms smbd.service
+           ...
+\end{verbatim}
 \end{frame}
 
-\begin{frame}
-  \note[item]{MBR muss im Schadensfall (Trojaner, etc.) neu angelegt werden. Dann aber auch keine Rekonstruktion mehr möglich!}
-  \frametitle{Stolperstein:\\MBR (Master Boot Record)}
-  \begin{itemize}
-    \item Das Löschen einzelner Dateien oder Verzeichnisse hat keinen Einfluss auf diesen Bereich
-    \item Schadprogramme setzen sich hier fest
-    \item Löschen von Partitionen bzw. Formatieren der Festplatte nützt nichts
-  \end{itemize}
-\end{frame}
+\begin{frame}[fragile]
 
-\begin{frame}
-  \frametitle{Löschmethoden}
-  \begin{itemize}
-    \item Gutmann-Methode (1996)
-    \item Russian GOST P50739-95
-    \item Bruce Schneier's Algorithm
-  \end{itemize}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Die Mär vom 35-fachen Überschreiben}
-  Ist es wirklich notwendig, einen Datenträger 35-fach zu überschrieben, um sicher zu sein, daß nichts mehr rekonstruierbar ist?
-  \pause
-  \begin{alertblock}{Craig Wright behauptet}
-    {\bf NEIN!} (Studie von 2009).
-  \end{alertblock}
-  \pause
-  Bereits das einmalige Überschreiben lässt keine Chance für Forensiker
-\end{frame}
-
-\begin{frame}
-  \note[item]{shred: Arbeitet nach Gutmann-Methode, kann keine Ordner löschen.}
-  \note[item]{Secure Remove: Steht für Debian/Ubuntu im Paket secure-delete bereit.}
-  \frametitle{Werkzeuge für sicheres Löschen\\(einzelne Dateien)}
-  \begin{itemize}
-    \item shred
-      \begin{itemize}
-        \item shred -vun \textit{Durchgänge} \textit{Datei1  Datei2}
-        \item find \textit{Verzeichnis} -type f -print0 \textbar ~xargs -0 shred -vun \textit{Durchg.}
-      \end{itemize}
-    \item wipe
-      \begin{itemize}
-        \item wipe \textit{datei.jpg}
-        \item wipe -r \textit{Ordner/}
-      \end{itemize}
-    \item Secure Remove
-  \end{itemize}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Werkzeuge für sicheres Löschen\\(ganze Datenträger)}
-  \begin{itemize}
-    \item dd
-      \begin{itemize}
-        \item dd \path{if=/dev/zero} \path{of=/dev/sda}
-        \item dd \path{if=/dev/urandom} \path{of=/dev/sda}
-      \end{itemize}
-    \item shred
-      \begin{itemize}
-        \item shred -vn \textit{Durchgänge} \textit{Gerät}
-      \end{itemize}
-    \item wipe
-      \begin{itemize}
-        \item wipe -k \path{/dev/sda7}
-      \end{itemize}
-    \item Plattenputzer
-    \item DBAN
-  \end{itemize}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Werkzeuge für sicheres Löschen\\(ganze Datenträger)}
-  %\includegraphics[width=0.9\linewidth]{Bilder/HDDFragmente}
-\end{frame}
-
-\begin{frame}[fragile]   % Die "fragile"-Option muss verwendet werden, wenn auf der Folie verbatim verwendet wird
-\frametitle{Links zur Präsentation}
+  Startprozess als Grafik exportieren:
   \begin{verbatim}
-    http://www.linux-magazine.com/Issues/2017/200/Tutorials-Systemd
-    https://wiki.debian.org/systemd/Services
+  $ systemd-analyze plot > startup_plot.svg
   \end{verbatim}
+  \includegraphics[height=0.6\linewidth]{Bilder/startup_plot.png}
+
+\end{frame}
+
+\begin{frame}[fragile]
+Wie man sieht, wird sehr lange auf das Netwerk gewartet, was ich hier am Rechner aber nicht brauche:
+
+\begin{verbatim}
+$ sudo systemctl disable NetworkManager-wait-online.service
+\end{verbatim}
+
+Nach dem Neustart:
+\begin{verbatim}
+$ systemd-analyze time
+Startup finished in 4.147s (kernel) + 8.690s (user) = 12.837s
+
+$ systemd-analyze blame
+        6.785s docker.service
+        5.505s nmbd.service
+        ...
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]
+Was ist denn mit docker los?
+
+\begin{verbatim}
+$ sudo docker info
+  Containers: 120
+  ...
+  Images: 488
+\end{verbatim}
+
+Sollte man 'mal aufräumen. Und samba benötige ich auch nicht: weg damit. Hinterher:
+
+\begin{verbatim}
+$ systemd-analyze blame
+    2.090s docker.service
+    2.022s snapd.autoimport.service
+    1.075s exim4.service
+
+$ systemd-analyze time
+Startup finished in 4.183s (kernel) + 3.920s (user) = 8.103s
+\end{verbatim}
+
+Fazit: Startup von 23.8s auf 8.1s minimiert
+
 \end{frame}
 
 \begin{frame}
-\frametitle{Weitere Informationen bekommen Sie hier:}
+\frametitle{Fragen?}
   \begin{center}
   \Large{
-    \fsog \\      % Makro für das Einfügen der URL (oben definiert)
-    und \\
-    Kontakt@FreieSoftwareOG.org \\~\\
+    section77@josoansi.de \\~\\
 
     oder kommen Sie doch einfach zu unserem regelmäßigen Treffen, \\
     jeden 1. Mittwoch im Monat ab 20:00 Uhr. \\
@@ -296,6 +285,6 @@ In den Standard-Distros inzwischen enthalten und dort zum Default geworden:
   \begin{figure}[ht]
     \centering
     \includegraphics[width=0.2\textwidth]{../gemeinsam/CC-BY-SA.png}
-  \end{figure}  
+  \end{figure}
 \end{frame}
 \end{document}
