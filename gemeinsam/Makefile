@@ -10,3 +10,4 @@ clean:
 
 realclean: clean
 	rm -f *.pdf
+	$(MAKE) -C Bilder clean
