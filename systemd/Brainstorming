@@ -15,7 +15,9 @@ Links:
   Arch (seit Okt. 2012)
 
 * Vorteile:
-  - höhere Geschwindigkeit beim Start des Systems
+  - höhere Geschwindigkeit beim Start des Systems durch parallel gestartete Prozesse. Dies macht besonders bei Mehrkernprozessoren Sinn
+  - systemd kümmert sich um eine Strategie wie die Prozesse nacheinander gestartet werden können. Der Anwender gibt einfach nur an welche anderen
+    Prozesse benötigt werden
   - vereinfachte Schnittstelle zur Steuerung der Dienste und Betrachtung der
     Logfiles
 
@@ -26,7 +28,7 @@ Links:
 
 * allgemeine Vor-/Nachteile; Diskussion (Stichwort: devuan)
 
-  ich habe noch einen admin zu seiner Meinug gefragt,
+  ich habe noch einen Admin zu seiner Meinug gefragt,
   was aus seiner Sicht bei systemd besser gelöst ist als SysVInit:
 
   "Hm, mir fällt ziemlich weit vorne ein: Logging.
@@ -74,33 +76,118 @@ Links:
     systemctl enable apache2
 
 
-* Wie schreibe ich selbst eine kleine Regel (automount oder sowas)
+* Wie schreibe ich selbst einen service
 
-  curl https://demo.volkszaehler.org/middleware.php/data/33a31710-7019-11e9-9024-8ba88e33a917.json | jq '.data.tuples[-1]'
+  Einfaches Beispiel: Ein Skript, welches regelmäßig die Außentemperatur pollt
+
+  siehe get_temp.sh
+
+  soll beim Systemstart automatisch im Hintergrund gestartet werden
+
+  siehe get_temp.service
+
+  $ sudo cp get_temp.service /etc/systemd/system
+  $ sudo systemctl start get_temp
+  $ sudo systemctl status get_temp
+
+  andy@WeberLinux:~/src/fsog_latex_beamer/systemd$ sudo systemctl status get_temp
+  ● get_temp.service - read outdoor temperature service
+     Loaded: loaded (/etc/systemd/system/get_temp.service; static; vendor preset: enabled)
+     Active: active (running) since Tue 2019-06-04 08:39:00 CEST; 29s ago
+   Main PID: 4129 (get_temp.sh)
+      Tasks: 2 (limit: 4915)
+     Memory: 772.0K
+        CPU: 94ms
+     CGroup: /system.slice/get_temp.service
+             ├─4129 /bin/bash -e /home/andy/src/fsog_latex_beamer/systemd/get_temp.sh
+             └─4183 sleep 10
+
+  Jun 04 08:39:00 WeberLinux systemd[1]: Started read outdoor temperature service.
+  Jun 04 08:39:00 WeberLinux get_temp.sh[4129]: Außentemperatur = 18.9°C
+  Jun 04 08:39:10 WeberLinux get_temp.sh[4129]: Außentemperatur = 18.9°C
+  Jun 04 08:39:20 WeberLinux get_temp.sh[4129]: Außentemperatur = 18.9°C
+
+  Dauerhaft:
+  $ sudo systemctl enable get_temp.service
 
 * Systemstart beschleunigen:
 
   https://www.freedesktop.org/software/systemd/man/systemd-analyze.html
 
+  Das folgende ist eine echte Analyse meines Arbeitsplatzrechners, kein Fake.
+
   $ systemd-analyze time
-  Startup finished in 14.570s (firmware) + 1.819s (loader) + 2.935s (kernel) + 38.222s (userspace) = 57.547s
+  Startup finished in 3.584s (kernel) + 20.245s (userspace) = 23.830s
 
   $ systemd-analyze blame
-   22.669s apt-daily-upgrade.service
-   13.259s systemd-cryptsetup@home_crypt.service
-    1.953s apt-daily.service
-     537ms docker.service
-     436ms keyboard-setup.service
-     265ms exim4.service
-     214ms dev-nvme0n1p2.device
-     165ms phpsessionclean.service
-     157ms minidlna.service
-     133ms systemd-timesyncd.service
-      94ms apache2.service
+          9.533s NetworkManager-wait-online.service
+          7.600s docker.service
+          5.014s apt-daily.service
+          3.804s apt-daily-upgrade.service
+          1.546s exim4.service
+          1.192s snapd.autoimport.service
+           988ms ModemManager.service
+           921ms dev-sda1.device
+           843ms smbd.service
+           738ms accounts-daemon.service
+           689ms keyboard-setup.service
+           606ms apache2.service
 
   $ systemd-analyze critical-chain
+  graphical.target @19.025s
+  └─multi-user.target @19.024s
+    └─docker.service @11.424s +7.600s
+      └─network-online.target @11.421s
+        └─NetworkManager-wait-online.service @1.887s +9.533s
+          └─NetworkManager.service @1.443s +394ms
+            └─dbus.service @1.157s
+              └─basic.target @1.140s
+                └─sockets.target @1.140s
+                  └─docker.socket @1.137s +1ms
+                    └─sysinit.target @1.133s
+                      └─sys-fs-fuse-connections.mount @14.145s +3ms
+                        └─systemd-modules-load.service @96ms +222ms
+                          └─systemd-journald.socket @86ms
+                            └─-.slice @67ms
 
 
-  $ systemd-analyze plot > foo.svg
+  $ systemd-analyze plot > startup_plot.svg
   (Bildausschnitt in die Präsentation einfügen)
-  ristretto foo.svg
+
+  Wie man sieht, wird sehr lange auf das Netwerk gewartet, was ich hier am Rechner aber nicht brauche:
+
+  $ sudo systemctl disable NetworkManager-wait-online.service
+
+  Nach dem Neustart:
+
+  $ systemd-analyze time
+  Startup finished in 4.147s (kernel) + 8.690s (userspace) = 12.837s
+
+  $ systemd-analyze blame
+          6.785s docker.service
+          5.505s nmbd.service
+          1.932s snapd.autoimport.service
+           936ms exim4.service
+
+
+  Was ist denn mit docker los?
+  $ sudo docker info
+    Containers: 120
+     Running: 0
+     Paused: 0
+     Stopped: 120
+    Images: 488
+    ...
+
+  *hust* sollte man mal aufräumen. Und samba benötige ich auch nicht: weg damit. Hinterher:
+
+  $ systemd-analyze blame
+      2.090s docker.service
+      2.022s snapd.autoimport.service
+      1.075s exim4.service
+
+  $ systemd-analyze time
+  Startup finished in 4.183s (kernel) + 3.920s (userspace) = 8.103s
+
+  Fazit: Startup von 23.8s auf 8.1s minimiert
+
